@@ -1,0 +1,382 @@
+---
+title: <p style="color:white">The Presidential Effect on Baby Names</p>
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<style>
+table {
+  background-color: white !important;
+  color: black !important;
+}
+</style>
+
+
+
+<body style="background-color:black;"> 
+<p style="color:white">
+Class:HIS 320W<br>
+Date:2024/04/12<br>
+By: Aaron Soliz<br>
+</p>
+<a id="top"></a>
+
+> <p style="color:white"> Table of Contents </p> 
+
+<p style="color:white">
+Part 1: [Graph of President's Popularity](#section1)<br>
+Part 2: [Table of President's Data](#section2)<br>
+Part 3: [Map of President's Popularity](#section3)<br>
+Part 4: [President's Popularity over the years](#section4)<br>
+Part 5: [Regression Analysis](#section5)<br>
+Part 6: [Online Research](#section6)<br>
+Part 7: [Conclusion](#section7)<br>
+</p>
+
+<br>
+<p style="color:white">
+In this Paper I will dive into how presidents' names can affect the naming patterns in the US. I will do this by taking the Percentage of each president's name to see if there was a presidential bump or dip during their time in office. Initially I had female names in the graph but decided to remove the female counterpart as throughout all the president's names they had very low percentage and no peaks. Throughout this paper I will use different techniques to analyze SSA data to make a final conculsion. 
+</p>
+
+## {#section1}
+> <p style="color:white"> Graph of president's name popularity from 1880 to 1913 </p>   
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check1 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres1.txt")
+check1a.df <- data.frame(read.delim("C:/Users/Aaron M. Soliz/Downloads/pres_start_end.txt"))
+ggplotly(ggplot(check1) + geom_line(aes(year,perc,color=name)) + scale_y_log10() + 
+  scale_x_continuous(breaks = seq(1880,1913,4), limits = c(1880,1913)) + labs(y="Percentage",x="Year",col="President"))
+```
+<p style="color:white">
+<font size="1">Chester Arthur president from 1881-1885,Grover Cleveland president from 1885-1889 and 1893-1897, Benjamin Harrison president from 1889-1893, William  Mckinley president from 1897-1901, Theodore Roosevelt president from 1901-1909, William Taft president from 1909-1913</font><br>
+</p>
+
+
+---
+
+> <p style="color:white"> Graph of president's name popularity from 1912 to 1953 </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check2 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres2.txt")
+ggplotly(ggplot(check2) + geom_line(aes(year,perc,color=name)) + scale_y_log10() +
+  scale_x_continuous(breaks = seq(1912,1953,4), limits = c(1912,1953)) + labs(y="Percentage",x="Year",col="President"))
+```
+<p style="color:white">
+<font size="1">Woodrow Wilson president from 1913-1921, Warren Harding president from 1921-1923,Calvin Coolidge president from 1923-1929, Herbert Hoover president from 1929-1933, Franklin Roosevelt president from 1933-1945, Harry Truman president from 1945-1953</font>
+</p>
+
+---
+
+> <p style="color:white"> Graph of president's name popularity from 1952 to 1981 </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check3 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres3.txt")
+ggplotly(ggplot(check3) + geom_line(aes(year,perc,color=name)) + scale_y_log10() +
+  scale_x_continuous(breaks = seq(1952,1981,4), limits = c(1952,1981)) + labs(y="Percentage",x="Year",col="President"))
+```
+<p style="color:white">
+<font size="1">Dwight Eisenhower president from 1953-1961, John Kennedy president from 1961-1963, Lyndon Johnson president from 1963-1969, Richard Nixon president from 1969-1974, Gerald Ford president from 1974-1981, Jimmy Carter president from 1977-1981</font>
+</p>
+
+---
+
+> <p style="color:white"> Graph of president's name popularity from 1980 to 2024 </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check4 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres4.txt")
+ggplotly(ggplot(check4) + geom_line(aes(year,perc,color=name)) + scale_y_log10() +
+  scale_x_continuous(breaks = seq(1980,2024,4), limits = c(1980,2024)) + labs(y="Percentage",x="Year",col="President"))
+```
+<p style="color:white">
+<font size="1">Ronald Reagan president from 1981-1989, George Bush president from 1989-1993, Bill Clinton president from 1993-2001, George W. Bush president from 2001-2009, Barack obama president from 2009-2017, Donald Trump president from 2017-2021, Joseph Biden president from 2021-2024</font>
+</p>
+[Return to Top](#top)
+
+---
+
+<p style="color:white">
+When looking at the graphs above we can classify the naming pattern of when a president was in office into decrease, peak, and increase(take a look at table below to see where I placed different presidents). In the case of names that fell under the decrease class, more often than not their names had been on a downward decline from years before. In the case of the names that fell under the peak class, they would shoot up very rapidly and then return to the percentage it had before them being president. In the case of names that fell under the increase class, they would only see slight increase. 
+<br>
+<br>
+To understand why certain presidents had peaks while others decreased, I would take a look at their popular vote percentage and I found that on average presidents with over 54% fell under the peak classification and below 54% classified as decrease. Of course there are outliers such as Dwight Eisenhower and Ronald Reagan who broke the threshold but still decreased, on the other hand we have Grover Cleveland, Benjamin Harrison, and Barack Obama who didn't break the threshold but still caused a peak. In the table Chester Arthur has "n/a" in the table because he was sworn into office after Andrew Garfield got assassinated. Gerald ford also had "n/a" because he was sworn into office after Richard Nixon resigned.
+</p>
+<br>
+
+## {#section2}
+> <p style="color:white"> Table of Presidents from 1880-2024 </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(knitr)
+options(scipen = 999)
+check5 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres_list.txt")
+kable(check5,table.attr = "style = \"color: white;\"")
+```
+<p style="color:white">
+<font size="1">I only did the popular vote percentage from their first term to keep the data uniform </font>
+</p>
+[Return to Top](#top)
+
+---
+
+<p style="color:white">
+There are some other things I found interesting when looking at the data, such as Barack doesn't pop up in the SSA database until 2007, Woodrow Wilson causing the biggest presidential naming pattern dip(he has the 3rd lowest popular vote percentage in history)although he does cause a peak before his name falls off in popularity, and John not peaking until post Kennedy assassination. 
+<br>
+</p>
+
+---
+
+## {#section3}
+> <p style="color:white"> President's Popularity in the States </p>
+
+<p style="color:white">
+ In the maps below we take look at the president's name popularity during their first and last year in office. With this we can understand if Republican or Democrat president is more likely to cause an increase in their respective color state.
+<br>
+</p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+ library(tidyverse)
+ library(sf)
+ library(mapdata)
+ library(usmap)
+ library(plotly)
+ options(scipen = 999)
+ check6.df <- data.frame(read.delim("C:/Users/Aaron M. Soliz/Downloads/pres_start_end.txt"))
+ check7.df <- data.frame(read.delim("C:/Users/Aaron M. Soliz/Downloads/pres_names.txt"))
+
+ base_map.sf <- us_map()
+
+ map_function <- function(name,year){
+   select.df <- check7.df[which(check7.df$gender=="M"&check7.df$name==name&check7.df$year==year),]
+
+   states_map.sf <- left_join(base_map.sf, select.df, join_by("abbr"=="state"))
+
+   print(ggplot(states_map.sf) + geom_sf(aes(fill=perc)) + scale_fill_gradient(low="white",high="red",na.value="grey80")+ggtitle(paste(name,year)))
+ }
+ 
+ i <- 1
+ while(i != 20 ){
+   ggplotly(map_function(check6.df$name[i],check6.df$start[i]))
+   ggplotly(map_function(check6.df$name[i],check6.df$end[i]))
+   i <- i + 1 
+     }
+```
+<br>
+[Return to Top](#top)
+
+---
+
+<p style="color:white">
+ When cross-referencing the maps above with the electoral college maps for that election year, I found there is some level of correlation when the president shifts from one political party to the next. In the case of Woodrow in 1913 his name had popularity throughout all states but come 1920 he would only have popularity in the south east states. I believe this is because during the 1920 election the only blue states would be in the south east and the drop in popularity in the west came from all those states becoming red states. The same happens to Herbert and Franklin in the 1932 election to a lesser degree, Harry to Dwight in the 1952 election, Dwight to John in 1960 election, and more. In many cases of the earlier 1900s presidents if one president was popular in region "a" and it shifts to a different political party then region "a" would have less popularity for the new president. An example would be Dwight and John in 1960s, in map "Dwight 1961" he has popularity in mid west and south east but lacks north east and west but in "John 1961" he has opposite of Dwight.
+<br>
+<br>
+However things change in the late 1900s presidents, I believe this is because before the shift of people moving throughout the States and overall an increase in name and culture diversity. When looking at the late 1900s and 2000s electoral maps there are less landslide wins and a mixture of red and blue states. The correlation we see in the early 1900s president drops off and the data becomes more scattered. With the cases of maps "Barack 2017" and "Joseph 2024" being all grey would be due to lack of data. 
+<br>
+</p>
+
+---
+
+## {#section4}
+> <p style="color:white"> President's Popularity over the years </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check8 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres8.txt")
+ggplotly(ggplot(check8) + geom_line(aes(year,perc,color=name)) + scale_y_log10() +
+  scale_x_continuous(breaks = seq(1880,2024,20), limits = c(1880,2024)) + labs(y="Percentage",x="Year",col="President"))
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+options(scipen = 999)
+check9 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres9.txt")
+ggplotly(ggplot(check9) + geom_line(aes(year,perc,color=name)) + scale_y_log10() +
+  scale_x_continuous(breaks = seq(1880,2024,20), limits = c(1880,2024)) + labs(y="Percentage",x="Year",col="President"))
+```
+[Return to Top](#top)
+
+---
+
+<p style="color:white">
+When looking at the names of presidents over time, I found that many names are on the decline and the presidential bump was only delaying the downfall. To support this statement I will take a look at regression lines to measure the difference a president can cause in naming patterns. I also found it interesting that when looking at the president since 1880 to now that there are greater increases caused by other external factors, such as the resurgence of Benjamin, Theodore, Calvin, and Warren in the recent years. I believe this is because of the idea we talked in class where people are looking back a 100ish years and reusing those names.  
+</p>
+
+---
+
+## {#section5}
+> <p style="color:white"> Regression Analysis </p>
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(tidyverse)
+library(plotly)
+check8 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres8.txt")
+check9 <- read.delim("C:/Users/Aaron M. Soliz/Downloads/pres9.txt")
+model <- lm(data=check8%>%filter(name=="Franklin", gender=="M") %>%
+                     filter(year>=1920&year<=1930),
+                   formula = perc~year)
+
+ggplotly(check8 %>% filter(name=="Franklin", gender=="M") %>%
+  filter(year>=1900&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model$coefficients[1],
+              slope = model$coefficients[2],
+              color="red")+ggtitle("Franklin 1933-1945"))
+
+model2 <- lm(data=check8%>%filter(name=="Lyndon", gender=="M") %>%
+                     filter(year>=1933&year<=1953),
+                   formula = perc~year)
+
+ggplotly(check8 %>% filter(name=="Lyndon", gender=="M") %>%
+  filter(year>=1900&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model2$coefficients[1],
+              slope = model2$coefficients[2],
+              color="red")+ggtitle("Lyndon 1963-1969"))
+
+model3 <- lm(data=check8%>%filter(name=="Theodore", gender=="M") %>%
+                     filter(year>=1891&year<=1897),
+                   formula = perc~year)
+
+ggplotly(check8 %>% filter(name=="Theodore", gender=="M") %>%
+  filter(year>=1880&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model3$coefficients[1],
+              slope = model3$coefficients[2],
+              color="red")+ggtitle("Theodore 1901-1909"))
+
+model4 <- lm(data=check8%>%filter(name=="John", gender=="M") %>%
+                     filter(year>=1950&year<=1961),
+                   formula = perc~year)
+
+ggplotly(check8 %>% filter(name=="John", gender=="M") %>%
+  filter(year>=1920&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model4$coefficients[1],
+              slope = model4$coefficients[2],
+              color="red")+ggtitle("John 1961-1963"))
+
+model5 <- lm(data=check9%>%filter(name=="Richard", gender=="M") %>%
+                     filter(year>=1952&year<=1962),
+                   formula = perc~year)
+
+ggplotly(check9 %>% filter(name=="Richard", gender=="M") %>%
+  filter(year>=1920&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model5$coefficients[1],
+              slope = model5$coefficients[2],
+              color="red")+ggtitle("Richard 1969-1974"))
+
+model6 <- lm(data=check9%>%filter(name=="Ronald", gender=="M") %>%
+                     filter(year>=1954&year<=1981),
+                   formula = perc~year)
+
+ggplotly(check9 %>% filter(name=="Ronald", gender=="M") %>%
+  filter(year>=1920&year<=2020) %>%
+  ggplot(aes(x=year,y=perc)) + geom_line() +
+  geom_abline(intercept = model6$coefficients[1],
+              slope = model6$coefficients[2],
+              color="red")+ggtitle("Ronald 1981-1989"))
+
+```
+[Return to Top](#top)
+
+---
+
+<p style="color:white">
+When looking at the regression analysis of a handful of the presidents we can see in all cases but Lyndon their presidential bump actually decreased the rate of decline. In the case of Lyndon, his time in office didn't seem to change the rate of increase. From the regression analysis, I found that they supported my claim in that the presidential bump is only delaying the decrease of popularity in the name. I also found that my classification doesn't correlate to the new found data as presidents from different classes have the same regression analysis outcome. 
+<br>
+</p>
+
+---
+
+## {#section6}
+<p style="color:white">
+When trying to understand the presidential effect of common names versus unique names, such as John and George versus Woodrow and Dwight. With this problem it's hard to tell if a name is popular because of a president or another famous person. From the article “The Effects of Months, Holidays, and the Birthdays of Presidents on Choice of Baby Names” the writer mentions the idea of seeing the number of people born on the president’s birthdays with the same name to counteract the effect of other famous people. When looking at the data they provided, they found that at least in the case of George Washington that “There were, however, 17,322 persons named George in the database who were born on George Washington’s birthday (February 22). By using the ratio one sees that the rate at which boys are named George therefore increases by (17,322 / 3,192 – 1) x 100 % = 443 % on Washington’s birthday. An alternative measure is to look at the excess or difference between the two numbers: over the period of time covered by the database, 17,322 – 3,192 = 14,130 is an estimate of the number of boys named after the president because they were born on his birthday.”. Although this isn’t a definite means of measurement, I find it's a good way to filter out the outside effects. Along with this the article did the same above with other president’s names that can be found below in the table.When looking at the data from the table we can see that the effect is not as grand for every president <br>
+</p>
+![](C:/Users/Aaron M. Soliz/Downloads/PresidentBirth.png)
+<br>
+<br>
+<p style="color:white">
+With the increase of name diversity and seemingly decrease in tradition of naming your kid after a president’s name, the question comes up of what is causing this shift in naming pattern in the United States. To get a grasp of how people used to name kids we can look at “How to Name Baby without Handicapping it for Life”, within this book the writer lays the ins and outs of how to name a baby in 1922. When reading the book I found that the writer based their beliefs on the seven core rules of  “1. The name should be worthy, 2. It should have a good meaning, 3. It should be original, 4. It should be easy to pronounce, 5. It should be distinctive, 6. It should fit the family name 7. It should indicate the sex”, with this new information I believe people use to name their kids on the basis of strong family ties, simplicity, and solidity. I find that this ties into the older generation’s naming patterns and their higher level of patriotism. When looking at the seven core rules from the book, I found that only rules that hold up in modern times would be two and five because they align with modern naming patterns. In the present day people will name their kids following trends, culture heritage, and individuality. Along with the previous statement there has been an overall decrease in patriotism in the United States, with these two new ideas we can see why there is a decline in the tradition of naming your kid after the president. I find this shift is because of the increase of uniqueness in the world caused by globalization and technology. To get a better understanding of modern naming patterns surrounding presidents, I would search on an online forum called “Reddit” to get people's personal beliefs surrounding this topic. When looking on Reddit I found people saying things such as “ I just love the way Rutherford rolls off the tongue, but I don't think it's going to have a resurgence anytime soon. Dwight, Grover, and Harry are out for me due to other pop culture references (The Office, Sesame Street, and Harry Potter, respectively. Love them all, but no).”, “Ronald is a cool name, and a fairly obscure one these days sadly. If I named a child Ronald it wouldn't be because of Reagan though.”, and “If I'm naming a boy baby Calvin, it'll be because of Cal Ripken, not Coolidge.”. I found that in many cases president’s names would get overshadowed by more relevant pop culture references, negative stigma towards certain presidents, and lack of mention of recent presidents. This supports my idea of a shift of naming patterns in the United States. To go a step farther in the following article “ Naming Boys after U.S. Presidents in 20th Century”, I found that they had similar conclusions when it came to modern naming patterns in the United States. The writer from this article says “ We have shown that the fashion of naming babies after the actual American president passed away in 60’s of XX century, while the fashion of naming babies after a favourite celebrity has remained. These results provoke a conclusion that the society of the United States is politically more mature now than 60 years ago, because their images of politicians are more realistic.”, from this we can say that people have become more diverse with their interests and could care less about the president until its election period. From this article we can also see that the modern person consumes a lot more media than they did in the past and because of that someone's personal interest holds more weight than the president. This can also be seen by the maps of president’s name popularity([Map of President's Popularity](#section3)  as post sixties naming patterns became more sporadic.
+<br>
+<br>
+</p>
+![](C:/Users/Aaron M. Soliz/Downloads/JFKBaby.png)
+<br>
+<p style="color:white">
+Above is a primary document from the “John F. Kennedy Presidential library and museum” archive that was sent to John F. Kennedy to show support by naming their kid after him. This telegram shows us the level of fascination that people used to have for presidents and shows the difference in naming patterns as the parents' names were “John and Mary Grant”(traditional names).
+<br>
+<br>
+![](C:/Users/Aaron M. Soliz/Downloads/Census.png)
+<br>
+When trying to understand the shift in naming patterns related to presidents we can look at an article that used the United States Census to see how much more diverse it has become. In the article we find “Yet increasing diversity is prevalent everywhere—since 2010, 96% of all U.S. counties registered declines in their white population shares.” , with the increase of diversity throughout the United States comes the increase of name diversity as more ethnic backgrounds appear. With this American culture is becoming a mixture of multiple cultures, and becoming a breeding ground for creativity and uniqueness for naming patterns.This goes on to support my ongoing idea of why naming patterns are shifting away from traditional means.
+<br>
+<br>
+</p>
+[Return to Top](#top)
+
+---
+
+## {#section7}
+
+<p style="color:white">
+In conclusion, I found that presidents can cause a delay in the decrease of their name popularity but it can’t stop the overall trend of naming patterns becoming more unique. With the shift from old traditional naming patterns(strong family ties and simplicity) to modern naming patterns(trendy and individuality), so would the idea of naming your kids after a president. I hope my research can aid in the understanding of why people name their kids certain names.
+<br>
+</p>
+
+---
+
+<p style="color:white">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bibliography
+<br>
+“Chronological List of Presidents, First Ladies, and Vice Presidents of the United States.” Chronological 
+List of Presidents, First Ladies, and Vice &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Presidents of the United States - Guides, Reference Aids, and Finding Aids (Prints andPhotographs Reading Room, Library of Congress). &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accessed March 6, 2024. https://www.loc.gov/rr/print/list/057_chron.html. 
+<br>
+<br>
+“List of United States Presidential Elections by Popular Vote Margin.” Wikipedia, December 22, 2023. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://en.wikipedia.org/wiki/List_of_United_States_presidential_elections_by_popular_vote_margin. 
+<br>
+<br>
+“270TOWIN - 2024 Presidential Election Interactive Map.” 270toWin.com. Accessed April 12, 2024. https://www.270towin.com/. 
+<br>
+<br>
+“Babies Named after the President, 1960-1963 | JFK Library.” n.d. Www.jfklibrary.org. Accessed May 3, 2024. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://www.jfklibrary.org/asset-viewer/archives/jfkpof-129-007#?image_identifier=JFKPOF-129-007-p0014.
+<br>
+<br>
+K. Kułakowski, P Kulczycki, K Misztal, A. Dydejczyk, P Gronek, and M.J Krawczyk. 2016. “Naming Boys after U.S. Presidents in 20th Century.” Acta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physica Polonica A 129 (5): 1038–44. https://doi.org/10.12693/aphyspola.129.1038.
+<br>
+<br>
+Rogerson, Peter A. 2016. “The Effects of Months, Holidays, and the Birthdays of Presidents on Choice of Baby Names.” Names 64 (4): 234–41. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://doi.org/10.1080/00277738.2016.1223121.
+<br>
+<br>
+McQueen, Alexander. 1922. How to Name Baby without Handicapping It for Life: A Practical Guide for Parents and All Others Interested in “Better &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Naming.” Google Books. McQueen publishing Company&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://books.google.com/books?id=6WNAAAAAYAAJ&printsec=frontcover#v=onepage&q&f=false.
+<br>
+<br>
+“Six Maps That Reveal America’s Expanding Racial Diversity.” n.d. Brookings. &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://www.brookings.edu/articles/americas-racial-diversity-in-six-maps/.
+<br>
+<br>
+dumbredditusername-2. 2023. “What President Baby Names Are Your Favorites? Which Are Your Least Favorites? Any Tainted or Too &nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Old-Fashioned?” November 2, 2023. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://www.reddit.com/r/Presidents/comments/17md65x/what_president_baby_names_are_your_favorites/.
+</p>
+
+[Return to Top](#top)
+
